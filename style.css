@@ -96,6 +96,23 @@ ul.currencies li {
   color: #fff;
 
 }
+.ul .currency-list {
+  position: absolute;
+  bottom: 54px;
+  left:0;
+  background-color: #fff;
+  color: #2e2e36;
+  width: 100%;
+
+}
+ul.currency-list li .flag {
+  width: 2rem;
+  height: 2rem;
+  vertical-align: middle;  
+}
+ul.currency-list li span {
+  margin-left: 1rem;
+}
 .wrapper{
   display: flex;
   position: relative;
