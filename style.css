@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
 *{
   margin: 0;
   padding: 0;
@@ -18,6 +19,9 @@ body{
 .container {
   width: 500px;
   margin: 20px auto;
+  user-select: none;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .date {
@@ -38,9 +42,40 @@ ul.currencies li {
   border-radius: 5px;
   padding: 1rem 1rem 0.75rem 1rem;
   margin-bottom: 1rem;
+  list-style: none;
 }
-.info {
+.data {
   display: inline-block;
+  width: 78%;
+}
+.data .input span {
+  font-size: 1.5rem;
+  display: inline-block;
+  width: 4rem;
+  text-align: center;
+}
+.data .input input {
+  font-size: 1.5rem;
+  width: 78%;
+  background-color: transparent;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  color: #fff;
+  padding: 0.3rem;
+  margin-bottom: 0.75rem;
+}
+.data .curr-name {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  margin-left: 4rem;
+}
+.data .base-curr-rate {
+  font-size: 0.8rem;
+  margin-left: 4rem;
+}
+.flag {
+  vertical-align: top;
 }
 .add-btn {
     background-color: #0098b3;
@@ -56,7 +91,11 @@ ul.currencies li {
     transition: background-color 0.25s;
     position: relative
 }
+.remove-btn{
+  background-color: #0098b3;
+  color: #fff;
 
+}
 .wrapper{
   display: flex;
   position: relative;
@@ -122,11 +161,7 @@ ul.currencies li {
 .wrapper .main_content .info div{
   margin-bottom: 20px;
 }
-.container {
-  position: relative;
-  text-align: center;
-  color: white;
-}
+
 .centered {
   position: absolute;
   top: 50%;
