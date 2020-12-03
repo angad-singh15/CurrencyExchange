@@ -157,6 +157,7 @@ let currencies = [
     }
   }
 
+  //adds currencies to main display
   function newCurrenciesItem(currency){
     if(currencyList.childElementCount === 0){
       baseCurrency = currency.abbreviation;
@@ -177,12 +178,29 @@ let currencies = [
           <p class="curr-name">${currency.abbreviation} : ${currency.name}</p>
           <p class="base-curr-rate">1 ${baseCurrency} = ${exchangeRate} ${currency.abbreviation}</p>
       </div>
-      <button class="remove-btn" type="button" name="close">
       <span class="remove-currency">&times;</span>
-      </button>
       </li>`
     )
   }
 
+  addCurrencyList.addEventListener("click", addCurrencyListClick);
+
+  function addCurrencyListClick(event){
+    const itemClicked = event.target.closest("li");
+    if(!itemClicked.classList.contains("disabled")) {
+      const newCurr = currencies.find(x => x.abbreviation === itemClicked.getAttribute("currency-data"));
+      if(newCurr) newCurrenciesItem(newCurr);
+    }
+  }
+
+  currencyList.addEventListener("click", removeCurrency);
+
+  function removeCurrency(event){
+    if(event.target.classList.contains("remove-currency")) {
+      const node = event.target.parentNode;
+      node.remove()
+      addCurrencyList.querySelector(`[currency-data=${node.id}]`).classList.remove("disabled");
+    }
+  }
   addToCurrencyList();
   addToCurrencies();
