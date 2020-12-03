@@ -125,6 +125,7 @@ let currencies = [
     }
   ];
 
+  //Global variables and Event listeners
   const addCurrencyBtn = document.querySelector(".add-btn");
   const addCurrencyList = document.querySelector(".currency-list");
   const currencyList = document.querySelector(".currencies");
@@ -134,6 +135,8 @@ let currencies = [
   const displayInitialCurrencyList = ["USD", "INR", "EUR", "GBP"]
 
   addCurrencyBtn.addEventListener("click", addCurrencyBtnClick);
+  addCurrencyList.addEventListener("click", addCurrencyListClick);
+  currencyList.addEventListener("click", removeCurrency);
 
   function addCurrencyBtnClick(event){
     addCurrencyBtn.classList.toggle("open");
@@ -167,8 +170,7 @@ let currencies = [
     const baseCurrRate = currencies.find(x => x.abbreviation === baseCurrency).rate;
     const exchangeRate = currency.abbreviation === baseCurrency ? 1 : (currency.rate/baseCurrRate).toFixed(5);
     const userInput = baseCurrencyPrice ? (baseCurrencyPrice*exchangeRate).toFixed(5) : "";
-
-    currencyList.insertAdjacentHTML(
+    currencyList.insertAdjacentHTML(  //inserts each currency li item to html <ul>
       "beforeend",
       `<li class="currency ${currency.abbreviation===baseCurrency ? "base-currency" : ""}" id=${currency.abbreviation}>
       <img src=${currency.flagURL} class="flag">
@@ -183,8 +185,6 @@ let currencies = [
     )
   }
 
-  addCurrencyList.addEventListener("click", addCurrencyListClick);
-
   function addCurrencyListClick(event){
     const itemClicked = event.target.closest("li");
     if(!itemClicked.classList.contains("disabled")) {
@@ -192,8 +192,6 @@ let currencies = [
       if(newCurr) newCurrenciesItem(newCurr);
     }
   }
-
-  currencyList.addEventListener("click", removeCurrency);
 
   function removeCurrency(event){
     if(event.target.classList.contains("remove-currency")) {
@@ -210,6 +208,7 @@ let currencies = [
     }
   }
   
+  //sets new base currency according to the user's choice of currency
   function setNewBaseCurrency(newBaseCurrencyItem){
     newBaseCurrencyItem.classList.add("base-currency");
     baseCurrency = newBaseCurrencyItem.id;
@@ -223,12 +222,26 @@ let currencies = [
 
   currencyList.addEventListener("input", changeCurrencyInput);
 
+  //change the respective input field values for all currencies according to the base currency input
   function changeCurrencyInput(event){
     const isNewBaseCurr = event.target.closest("li").id!==baseCurrency;
     if(isNewBaseCurr){
       currencyList.querySelector(`#${baseCurrency}`).classList.remove("base-currency");
       setNewBaseCurrency(event.target.closest("li"));
     }
+    const newBaseCurrPrice = isNaN(event.target.value) ? 0 : Number(event.target.value);
+    if(baseCurrencyPrice!==newBaseCurrPrice || isNewBaseCurr){
+      baseCurrencyPrice = newBaseCurrPrice;
+      const baseCurrencyRate = currencies.find(currency => currency.abbreviation===baseCurrency).rate;
+      currencyList.querySelectorAll(".currency").forEach(x => {
+        if(x.id !== baseCurrency){
+            const currencyRate = currencies.find(curr => curr.abbreviation === x.id).rate;
+            const exchRate = x.id === baseCurrency ? 1 : (currencyRate/baseCurrencyPrice).toFixed(5);
+            x.querySelector(".input input").value = exchRate*baseCurrencyPrice !==0 ? (exchRate*baseCurrencyPrice).toFixed(5) : "";
+        }
+      });
+    }
   }
+
   addToCurrencyList();
   addToCurrencies();
