@@ -200,6 +200,34 @@ let currencies = [
       const node = event.target.parentNode;
       node.remove()
       addCurrencyList.querySelector(`[currency-data=${node.id}]`).classList.remove("disabled");
+      if(node.classList.contains("base-currency")){
+        const newBaseCurrencyItem = currencyList.querySelector(".currency");
+        if(newBaseCurrencyItem) {
+          setNewBaseCurrency(newBaseCurrencyItem);
+          baseCurrencyPrice  = Number(newBaseCurrencyItem.querySelector(".input input").value);
+        }
+      }
+    }
+  }
+  //TODO - fix error
+  function setNewBaseCurrency(newBaseCurrencyItem){
+    newBaseCurrencyItem.classList.add("base-currency");
+    baseCurrency = newBaseCurrencyItem.id;
+    const baseCurrencyPrice = currencies.find(currency => currency.abbreviation=== baseCurrency).rate;
+    currencyList.querySelector(".currency").forEach(x => {
+      const currencyRate = currencies.find(curr => curr.abbreviation === x.id).rate;
+      const exchRate = x.id === baseCurrency ? 1 : (currencyRate/baseCurrencyPrice).toFixed(5);
+      x.querySelector(".base-curr-rate").textContent = `1 ${baseCurrency} = ${exchRate} ${x.id}`;
+    });
+  }
+
+  currencyList.addEventListener("input", changeCurrencyInput);
+
+  function changeCurrencyInput(event){
+    const isNewBaseCurr = event.target.closest("li").id!==baseCurrency;
+    if(isNewBaseCurr){
+      currencyList.querySelector(`#${baseCurrency}`).classList.remove("base-currency");
+      setNewBaseCurrency(event.target.closest("li"));
     }
   }
   addToCurrencyList();
