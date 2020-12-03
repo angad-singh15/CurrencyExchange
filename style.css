@@ -91,6 +91,9 @@ ul.currencies li {
     transition: background-color 0.25s;
     position: relative
 }
+.add-btn:hover{
+  background-color: coral;
+}
 .remove-btn{
   background-color: #0098b3;
   color: #fff;
@@ -112,6 +115,16 @@ ul.currency-list li .flag {
 }
 ul.currency-list li span {
   margin-left: 1rem;
+}
+ul.currency-list{
+  position: absolute;
+  bottom: 54px;
+  left: 0;
+  background-color: #fff;
+  color: #222;
+  width: 100%;
+  height: calc(100vh - 40px - 100px - 55px);
+  overflow-y: auto;
 }
 .wrapper{
   display: flex;

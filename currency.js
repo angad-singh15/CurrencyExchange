@@ -184,5 +184,5 @@ let currencies = [
     )
   }
 
-  //addToCurrencyList();
-  //addToCurrencies();
+  addToCurrencyList();
+  addToCurrencies();
