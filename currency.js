@@ -130,6 +130,8 @@ let baseCurrency;
 let baseCurrencyPrice;
 const displayInitialCurrencyList = ["USD", "INR", "EUR", "GBP"]
 
+const apiURL = "https://api.exchangeratesapi.io/latest";
+
 addCurrencyBtn.addEventListener("click", addCurrencyBtnClick);
 addCurrencyList.addEventListener("click", addCurrencyListClick);
 currencyList.addEventListener("click", removeCurrency);
@@ -238,6 +240,16 @@ function changeCurrencyInput(event) {
     });
   }
 }
-
-addToCurrencyList();
-addToCurrencies();
+//get exchange rates and date from api url 
+//TODO - bug in exhange rates
+fetch(apiURL)
+  .then(res => res.json())
+  .then(data => {
+    document.querySelector(".date").textContent = data.date;
+    data.rates["EUR"] = 1;
+    currencies = currencies.filter(curr => data.rates[curr.abbreviation]);
+    currencies.forEach(currency => currency.rate = data.rates[currency.abbreviation]);
+    addToCurrencyList();
+    addToCurrencies();
+  })
+  .catch(err => console.log(err));
