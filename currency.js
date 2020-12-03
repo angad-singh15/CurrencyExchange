@@ -3,13 +3,15 @@ let currencies = [
       name: "US Dollar",
       abbreviation: "USD",
       symbol: "\u0024",
-      flagURL: "https://www.countryflags.io/us/shiny/64.png"
+      flagURL: "https://www.countryflags.io/us/shiny/64.png",
+      rate: 1.2223 //for testing
     },
     {
       name: "Euro",
       abbreviation: "EUR",
       symbol: "\u20AC",
-      flagURL: "https://www.countryflags.io/eu/shiny/64.png"
+      flagURL: "https://www.countryflags.io/eu/shiny/64.png",
+      rate: 2.333
     },
     {
       name: "Japanese Yen",
@@ -21,7 +23,8 @@ let currencies = [
       name: "British Pound",
       abbreviation: "GBP",
       symbol: "\u00A3",
-      flagURL: "https://www.countryflags.io/gb/shiny/64.png"
+      flagURL: "https://www.countryflags.io/gb/shiny/64.png",
+      rate: 1
     },
     {
       name: "Australian Dollar",
@@ -105,7 +108,8 @@ let currencies = [
       name: "Indian Rupee",
       abbreviation: "INR",
       symbol: "\u20B9",
-      flagURL: "https://www.countryflags.io/in/shiny/64.png"
+      flagURL: "https://www.countryflags.io/in/shiny/64.png",
+      rate: 1.34555
     },
     {
       name: "Indonesian Rupiah",
@@ -123,6 +127,11 @@ let currencies = [
 
   const addCurrencyBtn = document.querySelector(".add-btn");
   const addCurrencyList = document.querySelector(".currency-list");
+  const currencyList = document.querySelector(".currencies");
+
+  let baseCurrency;
+  let baseCurrencyPrice;
+  const displayInitialCurrencyList = ["USD", "INR", "EUR", "GBP"]
 
   addCurrencyBtn.addEventListener("click", addCurrencyBtnClick);
 
@@ -130,7 +139,7 @@ let currencies = [
     addCurrencyBtn.classList.toggle("open");
   }
 
-  //add currencies from list to html 
+  //add currencies from currencies list to html code
   function addToCurrencyList(){
     for(let i=0; i<currencies.length; i++){
       addCurrencyList.insertAdjacentHTML(
@@ -141,4 +150,39 @@ let currencies = [
     }
   }
 
- //addToCurrencyList();
+  function addToCurrencies() {
+    for(let i=0; i<displayInitialCurrencyList.length; i++){
+      const currency = currencies.find(x => x.abbreviation === displayInitialCurrencyList[i]);
+      if(currency) newCurrenciesItem(currency);
+    }
+  }
+
+  function newCurrenciesItem(currency){
+    if(currencyList.childElementCount === 0){
+      baseCurrency = currency.abbreviation;
+      baseCurrencyPrice = 0;
+    }
+    addCurrencyList.querySelector(`[currency-data=${currency.abbreviation}]`).classList.add("disabled");
+    const baseCurrRate = currencies.find(x => x.abbreviation === baseCurrency).rate;
+    const exchangeRate = currency.abbreviation === baseCurrency ? 1 : (currency.rate/baseCurrRate).toFixed(5);
+    const userInput = baseCurrencyPrice ? (baseCurrencyPrice*exchangeRate).toFixed(5) : "";
+
+    currencyList.insertAdjacentHTML(
+      "beforeend",
+      `<li class="currency ${currency.abbreviation===baseCurrency ? "base-currency" : ""}" id=${currency.abbreviation}>
+      <img src=${currency.flagURL} class="flag">
+      <div class="data">
+          <br>
+          <p class="input"><span class="currency-flag">${currency.symbol}</span><input placeholder="0.00000" value=${userInput}></p>
+          <p class="curr-name">${currency.abbreviation} : ${currency.name}</p>
+          <p class="base-curr-rate">1 ${baseCurrency} = ${exchangeRate} ${currency.abbreviation}</p>
+      </div>
+      <button class="remove-btn" type="button" name="close">
+      <span class="remove-currency">&times;</span>
+      </button>
+      </li>`
+    )
+  }
+
+  //addToCurrencyList();
+  //addToCurrencies();
