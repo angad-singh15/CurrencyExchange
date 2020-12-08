@@ -212,7 +212,7 @@ function setNewBaseCurrency(newBaseCurrencyItem) {
   baseCurrency = newBaseCurrencyItem.id;
   const baseCurrencyPrice = currencies.find(currency => currency.abbreviation === baseCurrency).rate;
   currencyList.querySelectorAll(".currency").forEach(x => {
-    const currencyRate = currencies.find(curr => curr.abbreviation === x.id).rate;
+    const currencyRate = currencies.find(currency => currency.abbreviation === x.id).rate;
     const exchRate = x.id === baseCurrency ? 1 : (currencyRate / baseCurrencyPrice).toFixed(5);
     x.querySelector(".base-curr-rate").textContent = `1 ${baseCurrency} = ${exchRate} ${x.id}`;
   });
@@ -233,15 +233,14 @@ function changeCurrencyInput(event) {
     const baseCurrencyRate = currencies.find(currency => currency.abbreviation === baseCurrency).rate;
     currencyList.querySelectorAll(".currency").forEach(x => {
       if (x.id !== baseCurrency) {
-        const currencyRate = currencies.find(curr => curr.abbreviation === x.id).rate;
-        const exchRate = x.id === baseCurrency ? 1 : (currencyRate / baseCurrencyPrice).toFixed(5);
+        const currencyRate = currencies.find(currency => currency.abbreviation === x.id).rate;
+        const exchRate = x.id === baseCurrency ? 1 : (currencyRate / baseCurrencyRate).toFixed(5);
         x.querySelector(".input input").value = exchRate * baseCurrencyPrice !== 0 ? (exchRate * baseCurrencyPrice).toFixed(5) : "";
       }
     });
   }
 }
 //get exchange rates and date from api url 
-//TODO - bug in exhange rates
 fetch(apiURL)
   .then(res => res.json())
   .then(data => {
